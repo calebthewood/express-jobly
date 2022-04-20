@@ -1,7 +1,7 @@
 "use strict";
 
 describe("config can come from env", function () {
-  test("works", function() {
+  test("works", function () {
     process.env.SECRET_KEY = "abc";
     process.env.PORT = "5000";
     process.env.DATABASE_URL = "other";
@@ -21,7 +21,8 @@ describe("config can come from env", function () {
     expect(config.getDatabaseUri()).toEqual("jobly");
     process.env.NODE_ENV = "test";
 
-    expect(config.getDatabaseUri()).toEqual("jobly_test");
+    expect(config.getDatabaseUri()).toEqual(
+      "postgresql://davidjeffers:1234@localhost:5432/jobly_test"
+    );
   });
-})
-
+});
