@@ -44,16 +44,17 @@ class Company {
     return company;
   }
   /**
-   * where =
+   * Accepts parameters to filter by in query string, and applies filters to
+   * findAll query.
+   *
    * append "WHERE"
    * {num} maxEmployees => {string} `num_employees <= $${index+1}`
    * append "AND"
    * {num} minEmployees => {string} `num_employees >= $${index+1}`
    * append "AND"
    * {string} name => {string} `ILIKE '%${name}%'
-   * @param {*} param0
+   *
    */
-  //
 
   static sqlFilterMaker({ minEmployees, maxEmployees, name }) {
     let whereArr = [];
@@ -77,13 +78,18 @@ class Company {
   }
 
   /** Find all companies.
-   * Filters(optional)
+   * Accepts optional filter argument
+   *
+   * { minEmployees: int, maxEmployees: int, name: string }
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll(filters) {
-    const { where, values } = this.sqlFilterMaker(filters);
+  static async findAll(filters = {}) {
+
+    const { minEmployees, maxEmployees, name } = filters;
+
+    const { where, values } = this.sqlFilterMaker({ minEmployees, maxEmployees, name });
 
     const companiesRes = await db.query(
       `SELECT handle,

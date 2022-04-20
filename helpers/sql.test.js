@@ -52,6 +52,7 @@ describe("sqlForPartialUpdate", function () {
       );
     } catch (err) {
       error = err;
+      //could catch err msg or code as well
     }
     expect(error).toBeInstanceOf(BadRequestError);
   });

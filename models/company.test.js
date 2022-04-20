@@ -110,6 +110,21 @@ describe("findAll", function () {
       },
     ]);
   });
+
+  test("works: with one filter", async function () {
+    let companies = await Company.findAll({
+      name: "C2"
+    });
+    expect(companies).toEqual([
+      {
+        handle: "c2",
+        name: "C2",
+        description: "Desc2",
+        numEmployees: 2,
+        logoUrl: "http://c2.img",
+      }
+    ]);
+  });
 });
 
 /************************************** get */
