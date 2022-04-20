@@ -1,6 +1,14 @@
 const { BadRequestError } = require("../expressError");
 
-// THIS NEEDS SOME GREAT DOCUMENTATION.
+/**
+ * Accepts two Arguments:
+ *   1. dataToUpdate: object of values to be inserted by pg into SQL query.
+ *   2. jsToSql: object containing properties to identify column names for update in SQL SET query.
+ *
+ * Returns two values:
+ *  1. column names as $-strings formatted to be inserted into an SQL query,
+ *  2. an array of corresponding values.
+ */
 
 function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   const keys = Object.keys(dataToUpdate);
