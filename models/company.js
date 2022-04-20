@@ -56,7 +56,24 @@ class Company {
   //
 
   static sqlFilterMaker({ minEmployees, maxEmployees, name }) {
-    let where = "";
+    let whereArr = [];
+    let values = [];
+
+    if (minEmployees) {
+      values.push(minEmployees);
+      whereArr.push(`num_Employees >= $${values.length}`);
+    }
+    if (maxEmployees) {
+      values.push(maxEmployees);
+      whereArr.push(`num_Employees <= $${values.length}`);
+    }
+    if (name) {
+      values.push(`%${name}%`);
+      whereArr.push(`name ILIKE $${values.length}`);
+    }
+
+    const where = whereArr.length > 0 ? "WHERE " + whereArr.join(" AND ") : "";
+    return { where, values };
   }
 
   /** Find all companies.
@@ -66,8 +83,8 @@ class Company {
    * */
 
   static async findAll(filters) {
-    let result;
-    if (filters) result = this.sqlFilterMaker(filters);
+    const { where, values } = this.sqlFilterMaker(filters);
+
     const companiesRes = await db.query(
       `SELECT handle,
                 name,
@@ -75,7 +92,8 @@ class Company {
                 num_employees AS "numEmployees",
                 logo_url AS "logoUrl"
            FROM companies ${where}
-           ORDER BY name`
+           ORDER BY name`,
+      values
     );
     return companiesRes.rows;
   }
