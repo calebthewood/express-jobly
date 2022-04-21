@@ -8,7 +8,7 @@ const {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
-  commonAfterAll
+  commonAfterAll,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -32,13 +32,12 @@ describe("create", function () {
     let job = await Job.create(newJob);
     let id = job.id;
     expect(job).toEqual({
-        id: id,
-        company_handle: "c1",
-        title: "new_job",
-        salary: 50,
-        equity: "0.01"
-      }
-    );
+      id: id,
+      company_handle: "c1",
+      title: "new_job",
+      salary: 50,
+      equity: "0.01",
+    });
 
     const result = await db.query(
       `SELECT company_handle, title, salary, equity
@@ -50,7 +49,7 @@ describe("create", function () {
         company_handle: "c1",
         title: "new_job",
         salary: 50,
-        equity: "0.01"
+        equity: "0.01",
       },
     ]);
   });
@@ -107,7 +106,7 @@ describe("findAll", function () {
         salary: 5,
         equity: "0.0011",
         company_handle: "c3",
-      }
+      },
     ]);
   });
 });
@@ -136,22 +135,24 @@ describe("get", function () {
   });
 });
 
-
 /************************************** update */
 
 describe("update", function () {
   const updateData = {
-    company_handle: "new_company",
     title: "new_job",
     salary: 500,
-    equity: "99",
+    equity: "1",
   };
 
   test("works", async function () {
     let job = await Job.update(jobId, updateData);
+
     expect(job).toEqual({
-      id: jobId,
-      ...updateData,
+      id: job.id,
+      title: "new_job",
+      salary: 500,
+      equity: "1",
+      company_handle: "c1",
     });
 
     const result = await db.query(
@@ -159,20 +160,17 @@ describe("update", function () {
            FROM jobs
            WHERE title = 'new_job'`
     );
-    expect(result.rows).toEqual([
-      {
-        id: jobId,
-        company_handle: "new_company",
-        title: "new_job",
-        salary: 500,
-        equity: "99",
-      },
-    ]);
+    expect(result.rows[0]).toEqual({
+      id: result.rows[0].id,
+      title: "new_job",
+      salary: 500,
+      equity: "1",
+      company_handle: "c1",
+    });
   });
 
   test("works: null fields", async function () {
     const updateDataSetNulls = {
-      company_handle: "new_company",
       title: "new_job",
       salary: null,
       equity: null,
@@ -180,29 +178,31 @@ describe("update", function () {
 
     let job = await Job.update(jobId, updateDataSetNulls);
     expect(job).toEqual({
-      id: jobId,
-      ...updateDataSetNulls,
+      id: job.id,
+      title: "new_job",
+      salary: null,
+      equity: null,
+      company_handle: "c1",
     });
 
     const result = await db.query(
-      `SELECT company_handle, title, salary, equity
+      `SELECT id, company_handle, title, salary, equity
            FROM jobs
            WHERE title = 'new_job'`
     );
-    expect(result.rows).toEqual([
-      {
-        id: jobId,
-        company_handle: "new_company",
-        title: "new_job",
-        salary: null,
-        equity: null,
-      },
-    ]);
+
+    expect(result.rows[0]).toEqual({
+      id: jobId,
+      company_handle: "c1",
+      title: "new_job",
+      salary: null,
+      equity: null,
+    });
   });
 
   test("not found if no such job", async function () {
     try {
-      await Job.update("nope", updateData);
+      await Job.get(999999999);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
@@ -224,15 +224,13 @@ describe("update", function () {
 describe("remove", function () {
   test("works", async function () {
     await Job.remove(jobId);
-    const res = await db.query(
-      "SELECT title FROM jobs WHERE title='c2Job'"
-    );
+    const res = await db.query("SELECT title FROM jobs WHERE title='firstJob'");
     expect(res.rows.length).toEqual(0);
   });
 
   test("not found if no such company", async function () {
     try {
-      await Job.remove("nope");
+      await Job.remove(99999);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
