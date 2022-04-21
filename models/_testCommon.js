@@ -15,7 +15,19 @@ async function commonBeforeAll() {
            ('c2', 'C2', 2, 'Desc2', 'http://c2.img'),
            ('c3', 'C3', 3, 'Desc3', 'http://c3.img')`);
 
-  await db.query(`
+  const jobIds = await db.query(
+    `INSERT INTO jobs(title, salary, equity, company_handle)
+    VALUES 
+    ('firstJob', '45', '0.1', 'c1'),
+    ('c2Job', '4', '0.01', 'c2'),
+    ('c3Job', '5', '0.0011', 'c3'),
+    ('secondJob', '45', '0.01', 'c1')
+    RETURNING id
+    `
+  );
+
+  await db.query(
+    `
         INSERT INTO users(username,
                           password,
                           first_name,
@@ -24,10 +36,11 @@ async function commonBeforeAll() {
         VALUES ('u1', $1, 'U1F', 'U1L', 'u1@email.com'),
                ('u2', $2, 'U2F', 'U2L', 'u2@email.com')
         RETURNING username`,
-      [
-        await bcrypt.hash("password1", BCRYPT_WORK_FACTOR),
-        await bcrypt.hash("password2", BCRYPT_WORK_FACTOR),
-      ]);
+    [
+      await bcrypt.hash("password1", BCRYPT_WORK_FACTOR),
+      await bcrypt.hash("password2", BCRYPT_WORK_FACTOR),
+    ]
+  );
 }
 
 async function commonBeforeEach() {
@@ -42,10 +55,10 @@ async function commonAfterAll() {
   await db.end();
 }
 
-
 module.exports = {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  jobIds,
 };
