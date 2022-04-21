@@ -54,7 +54,6 @@ router.get("/", ensureAdmin, async function (req, res, next) {
     const users = await User.findAll();
     return res.json({ users });
   } catch (err) {
-    console.log("errrrrrrr", err);
     return next(err);
   }
 });

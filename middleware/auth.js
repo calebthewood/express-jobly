@@ -49,7 +49,6 @@ function ensureAdmin(req, res, next) {
     }
     return next();
   } catch (err) {
-    console.log(err);
     return next(err);
   }
 }
@@ -57,10 +56,9 @@ function ensureAdmin(req, res, next) {
 function ensureAdminOrCorrectUser(req, res, next) {
   try {
     const user = res.locals.user;
-    console.log(user.username);
-    console.log(req.params.username);
     if (!user) throw new UnauthorizedError();
     if (!(user.isAdmin || user.username == req.params.username)) {
+
       throw new UnauthorizedError();
     }
     return next();
