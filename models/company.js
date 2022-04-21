@@ -86,10 +86,13 @@ class Company {
    * */
 
   static async findAll(filters = {}) {
-
     const { minEmployees, maxEmployees, name } = filters;
 
-    const { where, values } = this.sqlFilterMaker({ minEmployees, maxEmployees, name });
+    const { where, values } = this.sqlFilterMaker({
+      minEmployees,
+      maxEmployees,
+      name,
+    });
 
     const companiesRes = await db.query(
       `SELECT handle,
@@ -169,6 +172,7 @@ class Company {
    **/
 
   static async remove(handle) {
+    console.log("remove model");
     const result = await db.query(
       `DELETE
            FROM companies

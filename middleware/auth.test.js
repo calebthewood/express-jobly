@@ -5,13 +5,13 @@ const { UnauthorizedError } = require("../expressError");
 const {
   authenticateJWT,
   ensureLoggedIn,
+  ensureAdmin,
+  ensureAdminOrCorrectUser,
 } = require("./auth");
-
 
 const { SECRET_KEY } = require("../config");
 const testJwt = jwt.sign({ username: "test", isAdmin: false }, SECRET_KEY);
 const badJwt = jwt.sign({ username: "test", isAdmin: false }, "wrong");
-
 
 describe("authenticateJWT", function () {
   test("works: via header", function () {
@@ -53,7 +53,6 @@ describe("authenticateJWT", function () {
     expect(res.locals).toEqual({});
   });
 });
-
 
 describe("ensureLoggedIn", function () {
   test("works", function () {
