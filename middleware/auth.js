@@ -44,22 +44,27 @@ function ensureLoggedIn(req, res, next) {
 //Authorization (is user admin?)
 function ensureAdmin(req, res, next) {
   try {
-    if (res.locals.user.isAdmin) {
-      return next();
+    if (!res.locals.user || !res.locals.user.isAdmin) {
+      throw new UnauthorizedError();
     }
+    return next();
   } catch (err) {
-    throw new UnauthorizedError();
+    console.log(err);
+    return next(err);
   }
-  return next();
 }
 
 function ensureAdminOrCorrectUser(req, res, next) {
   try {
-    if (res.locals.user.isAdmin || res.locals.user !== req.params.username) {
-      return next();
+    const user = res.locals.user;
+    console.log(user.username);
+    console.log(req.params.username);
+    if (!user) throw new UnauthorizedError();
+    if (!(user.isAdmin || user.username == req.params.username)) {
+      throw new UnauthorizedError();
     }
+    return next();
   } catch (err) {
-    throw new UnauthorizedError();
     return next(err);
   }
 }
