@@ -172,7 +172,6 @@ class Company {
    **/
 
   static async remove(handle) {
-    console.log("remove model");
     const result = await db.query(
       `DELETE
            FROM companies
