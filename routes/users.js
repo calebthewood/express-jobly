@@ -113,4 +113,19 @@ router.delete(
   }
 );
 
+/**
+ *
+ */
+
+router.post(
+  "/:username/jobs/:id",
+  ensureAdminOrCorrectUser,
+  async function (req, res, next) {
+    const username = req.params.username;
+    const id = req.params.id;
+    console.log(username, id);
+    await User.applyToJob(username, id);
+    return res.json({ "Applied to job": id });
+  }
+);
 module.exports = router;
