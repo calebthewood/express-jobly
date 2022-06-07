@@ -22,7 +22,7 @@ describe("config can come from env", function () {
     process.env.NODE_ENV = "test";
 
     expect(config.getDatabaseUri()).toEqual(
-      "postgresql://davidjeffers:1234@localhost:5432/jobly_test"
+      "jobly_test"
     );
   });
 });

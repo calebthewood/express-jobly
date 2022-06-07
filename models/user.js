@@ -135,8 +135,17 @@ class User {
     );
 
     const user = userRes.rows[0];
-
     if (!user) throw new NotFoundError(`No user: ${username}`);
+
+    const jobRes = await db.query(
+      `SELECT job_id
+        FROM applications
+        WHERE username = $1
+        ORDER BY job_id DESC`,
+        [username]
+    );
+
+    user.jobs = jobRes.rows.map(row => row.job_id);
 
     return user;
   }
@@ -170,9 +179,9 @@ class User {
     });
     const usernameVarIdx = "$" + (values.length + 1);
 
-    const querySql = `UPDATE users 
-                      SET ${setCols} 
-                      WHERE username = ${usernameVarIdx} 
+    const querySql = `UPDATE users
+                      SET ${setCols}
+                      WHERE username = ${usernameVarIdx}
                       RETURNING username,
                                 first_name AS "firstName",
                                 last_name AS "lastName",
@@ -201,6 +210,11 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
+
+  /**
+   * Accepts Username & Id and adds job application.
+   * Inserts into through-table for User & Jobs
+   */
   static async applyToJob(username, jobId) {
     try {
       await db.query(

@@ -140,6 +140,7 @@ describe("get", function () {
       lastName: "U1L",
       email: "u1@email.com",
       isAdmin: false,
+      jobs: [],
     });
   });
 
@@ -215,7 +216,7 @@ describe("remove", function () {
   test("works", async function () {
     await User.remove("u1");
     const res = await db.query(
-        "SELECT * FROM users WHERE username='u1'");
+      "SELECT * FROM users WHERE username='u1'");
     expect(res.rows.length).toEqual(0);
   });
 
@@ -227,4 +228,54 @@ describe("remove", function () {
       expect(err instanceof NotFoundError).toBeTruthy();
     }
   });
+});
+
+/************************************** applications */
+
+describe("apply to job", function () {
+
+  test("works", async function () {
+    const resp = await db.query(`
+    SELECT id
+      FROM jobs
+      WHERE title = $1`,
+      ['firstJob']);
+    const jobId = resp.rows[0].id;
+
+    await User.applyToJob("u1", jobId);
+
+    const job = await db.query(`
+    SELECT *
+    FROM applications
+    WHERE job_id = $1`,
+      [jobId]);
+
+    expect(job.rows[0]).toEqual({
+      job_id: jobId,
+      username: "u1"
+    });
+  });
+
+  test("no such user", async function () {
+    const resp = await db.query(`
+    SELECT id
+      FROM jobs
+      WHERE title = $1`,
+      ['firstJob']);
+    const jobId = resp.rows[0].id;
+    try {
+      await User.applyToJob("bananas", jobId);
+    } catch (err) {
+      expect(err).toBeInstanceOf(BadRequestError);
+    }
+  });
+
+  test("no such job", async function () {
+    try {
+      await User.applyToJob("u1", 8675301);
+    } catch (err) {
+      expect(err).toBeInstanceOf(BadRequestError);
+    }
+  });
+
 });
