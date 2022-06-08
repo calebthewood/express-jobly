@@ -65,9 +65,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-An Express Backend to Complement *add link to frontend*
+An Express Backend to complement [Jobly](https://react-jobly-1.surge.sh/), my job-board app built with React.
 
 ### Built With
 
