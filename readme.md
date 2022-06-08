@@ -70,6 +70,7 @@ An Express Backend to complement [Jobly](https://react-jobly-1.surge.sh/), my jo
 ### Built With
 
 * [Node](https://nodejs.org/en/)
+* [Express](https://expressjs.com/)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
