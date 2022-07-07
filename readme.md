@@ -71,6 +71,10 @@ An Express Backend to complement [Jobly](https://react-jobly-1.surge.sh/), my jo
 
 * [Node](https://nodejs.org/en/)
 * [Express](https://expressjs.com/)
+* [JWT](https://jwt.io/)
+* [JSON Schema](https://json-schema.org/)
+* [Postgres](https://www.postgresql.org/)
+* [PG](https://www.npmjs.com/package/pg)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -129,37 +133,19 @@ See the [open issues](https://github.com/calebthewood/express-jobly/issues) for 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 <!-- CONTACT -->
 ## Contact
 
 Questions? - I'm on twitter [@calebthewood](https://twitter.com/calebthewood) - or email: calebwood.cs@gmail.com
 
-Project Link: [https://github.com/calebthewood/personal-site](https://github.com/calebthewood/personal-site)
+[Personal Site](https://www.calebwood.dev/)
 
 
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Rithm School](https://www.rithmschool.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
