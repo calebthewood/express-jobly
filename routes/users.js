@@ -128,4 +128,5 @@ router.post(
     return res.json({ "Applied to job": id });
   }
 );
+
 module.exports = router;

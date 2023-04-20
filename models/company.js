@@ -40,7 +40,6 @@ class Company {
       [handle, name, description, numEmployees, logoUrl]
     );
     const company = result.rows[0];
-
     return company;
   }
   /**
@@ -72,7 +71,6 @@ class Company {
       values.push(`%${name}%`);
       whereArr.push(`name ILIKE $${values.length}`);
     }
-
     const where = whereArr.length > 0 ? "WHERE " + whereArr.join(" AND ") : "";
     return { where, values };
   }
@@ -138,9 +136,7 @@ class Company {
       ORDER BY id DESC`,
       [handle]
     );
-
     company.jobs = jobRes.rows;
-
     return company;
   }
 
